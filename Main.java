@@ -68,9 +68,9 @@ class Main{
 		}
 		
 		synth.stop();
-		System.out.println("Stopping the sound.");
+		//System.out.println("Stopping the sound.");
 		
-		System.out.println("Closing the main thread.");
+		//System.out.println("Closing the main thread.");
 		return;
 	}
 	
