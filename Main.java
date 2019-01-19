@@ -1,6 +1,8 @@
 import java.awt.MouseInfo;
 import java.awt.PointerInfo;
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.*;
 
@@ -23,8 +25,6 @@ class Main{
 	public static final int SAMPLE_BUFFER_SIZE = 1000;
 
 	public static void main(String args[]){
-
-		
 		SawtoothOscillatorBL osc = new SawtoothOscillatorBL();
 		LineOut lineOut = new LineOut();
 		Synthesizer synth = JSyn.createSynthesizer();
@@ -43,51 +43,25 @@ class Main{
 		//connect the osc to the lineOut's output first
 		//then turn on the lineOut to allow sound to play.
 		System.out.println("Press q to quit.");
-		double newY, speed;
-		final int numSamples = 10;
-		double[] xSamples = new double[numSamples];
-		double[] ySamples = new double[numSamples];
-		double[] speedSamples = new double[numSamples];
-		int replaceIndex = 0;
+		
+		final DataCollector dataCollector = new DataCollector();
 
 		while(true) {
-			Point startPosition = MouseInfo.getPointerInfo().getLocation();
-			xSamples[replaceIndex] = startPosition.getX();
-			ySamples[replaceIndex] = startPosition.getY();
-			double xChange = xSamples[replaceIndex] - xSamples[mod(replaceIndex - 1, numSamples)];
-			double yChange = ySamples[replaceIndex] - ySamples[mod(replaceIndex - 1, numSamples)];
-			speedSamples[replaceIndex] = Math.sqrt(xChange * xChange + yChange * yChange);
-			speed = mean(speedSamples);
-			newY = mean(ySamples);
-			replaceIndex = mod(replaceIndex + 1, numSamples);
 			try{
 				TimeUnit.MILLISECONDS.sleep(50);
 			}
 			catch(InterruptedException e){
 				System.out.println("Whoop, there it is.");
 			}
-			
-			if(speed > 0) { //if the mouse is moving, play sound.
-				osc.frequency.set(200+newY);
-				osc.amplitude.set(0.05 * speed);
+			double[] data = dataCollector.collect();
+			if(data[2] > 0) { //if the mouse is moving, play sound.
+				osc.frequency.set(200 + data[1]);
+				osc.amplitude.set(0.05 * data[2]);
 			} else { //if it isn't, don't play sound.
 				osc.frequency.set(0);
 				osc.amplitude.set(0);
 			}
 		}
 	}
-	public static double mean(double[] data) {
-		double sum = 0;
-		for(int i = 0; i < data.length; i++) {
-			sum += data[i];
-		}
-		return sum / data.length;
-	}
-	public static int mod(int num, int modulus) {
-		int remainder = num % modulus;
-		if(remainder < 0) {
-			remainder += modulus;
-		}
-		return remainder;
-	}
+	
 }
