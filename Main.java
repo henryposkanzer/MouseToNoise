@@ -59,8 +59,8 @@ class Main{
 			}
 			double[] data = dataCollector.collect();
 			if(data[2] > 0) { //if the mouse is moving, play sound.
-				osc.frequency.set(userCommands.getVolumeOffset() + data[1]);
-				osc.amplitude.set(0.05 * data[2]);
+				osc.frequency.set(userCommands.getPitchOffset() + data[1]);
+				osc.amplitude.set(userCommands.getVolumeOffset() * data[2]);
 			} else { //if it isn't, don't play sound.
 				osc.frequency.set(0);
 				osc.amplitude.set(0);
