@@ -22,13 +22,20 @@ class Main{
 		SawtoothOscillatorBL osc = new SawtoothOscillatorBL();
 		LineOut lineOut = new LineOut();
 		Synthesizer synth = JSyn.createSynthesizer();
+		//synthesizer needed as container for oscillator.
+		//oscillator determines which sound is played
+		//lineOut accesses speakers.
+		
 		synth.start();
 		synth.add(lineOut);
 		synth.add(osc);
+		//turn on synth and put the osc and lineOut in it.
 		
 		osc.output.connect(0, lineOut.input, 0);
 		osc.output.connect(0, lineOut.input, 1);
 		lineOut.start();
+		//connect the osc to the lineOut's output first
+		//then turn on the lineOut to allow sound to play.
 		
 		System.out.println("Press q to quit.");
 		double newX, newY, oldX, oldY, speed;
@@ -52,10 +59,10 @@ class Main{
 				System.out.println("Whoop, there it is.");
 			}
 			
-			if(speed > 0) {
+			if(speed > 0) { //if the mouse is moving, play sound.
 				osc.frequency.set(440);
 				osc.amplitude.set(0.2 * speed);
-			} else {
+			} else { //if it isn't, don't play sound.
 				osc.frequency.set(440);
 				osc.amplitude.set(0);
 			}
