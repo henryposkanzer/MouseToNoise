@@ -32,10 +32,22 @@ public class InputThread extends Thread {
 			switch(this.nextCommand) {
 			case('s'):
 				this.quit = true;
-				break;
+			break;
 			case('n'):
 				System.out.println("Never gonna give you up.");
-				break;
+			break;
+			case('p'):
+				this.raisePitch();
+			break;
+			case('P'):
+				this.lowerPitch();
+			break;
+			case('v'):
+				this.raiseVolume();
+			break;
+			case('V'):
+				this.lowerVolume();
+			break;
 			case('q'):
 				lineOut.stop();
 				System.out.println("Quitting");
@@ -47,7 +59,7 @@ public class InputThread extends Thread {
 				}
 				System.out.println("There is no escape.");
 				lineOut.start();
-				break;
+			break;
 			default:
 				System.out.println("Invalid command.");
 			}
@@ -59,8 +71,26 @@ public class InputThread extends Thread {
 	}
 	
 	private void raisePitch() {
-		if(this.pitchOffset < 400) {
-			pitchOffset += 50;
+		if(this.pitchOffset < 600) {
+			pitchOffset += 1000;
+		}
+	}
+	
+	private void lowerPitch() {
+		if(this.pitchOffset > 100) {
+			pitchOffset -= 100;
+		}
+	}
+	
+	private void raiseVolume() {
+		if(this.pitchOffset < 0.15) {
+			pitchOffset += 0.02;
+		}
+	}
+	
+	private void lowerVolume() {
+		if(this.pitchOffset > 0.05) {
+			pitchOffset -= 0.02;
 		}
 	}
 	
