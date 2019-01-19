@@ -43,20 +43,23 @@ class Main{
 		//connect the osc to the lineOut's output first
 		//then turn on the lineOut to allow sound to play.
 		System.out.println("Press q to quit.");
-		double newX, newY, oldX, oldY, speed;
-		oldX = oldY = 0;
+		double newY, speed;
+		final int numSamples = 10;
+		double[] xSamples = new double[numSamples];
+		double[] ySamples = new double[numSamples];
+		double[] speedSamples = new double[numSamples];
+		int replaceIndex = 0;
 
 		while(true) {
 			Point startPosition = MouseInfo.getPointerInfo().getLocation();
-			newX = startPosition.getX();
-			newY = startPosition.getY();
-			System.out.println("Cursor position: x is " + newX + ". y is " + newY + ".");
-
-			speed = Math.sqrt( ((newX-oldX)*(newX-oldX)) +  ((newY-oldY)*(newY-oldY)) );
-			System.out.println("Speed is: " + speed);
-
-			oldX = newX;
-			oldY = newY;
+			xSamples[replaceIndex] = startPosition.getX();
+			ySamples[replaceIndex] = startPosition.getY();
+			double xChange = xSamples[replaceIndex] - xSamples[mod(replaceIndex - 1, numSamples)];
+			double yChange = ySamples[replaceIndex] - ySamples[mod(replaceIndex - 1, numSamples)];
+			speedSamples[replaceIndex] = Math.sqrt(xChange * xChange + yChange * yChange);
+			speed = mean(speedSamples);
+			newY = mean(ySamples);
+			replaceIndex = mod(replaceIndex + 1, numSamples);
 			try{
 				TimeUnit.MILLISECONDS.sleep(50);
 			}
@@ -72,5 +75,19 @@ class Main{
 				osc.amplitude.set(0);
 			}
 		}
+	}
+	public static double mean(double[] data) {
+		double sum = 0;
+		for(int i = 0; i < data.length; i++) {
+			sum += data[i];
+		}
+		return sum / data.length;
+	}
+	public static int mod(int num, int modulus) {
+		int remainder = num % modulus;
+		if(remainder < 0) {
+			remainder += modulus;
+		}
+		return remainder;
 	}
 }
