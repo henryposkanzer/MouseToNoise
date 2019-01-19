@@ -26,6 +26,7 @@ class Main{
 
 	public static void main(String args[]){
 		SawtoothOscillatorBL osc = new SawtoothOscillatorBL();
+		SawtoothOscillatorBL osc2 = new SawtoothOscillatorBL();
 		LineOut lineOut = new LineOut();
 		Synthesizer synth = JSyn.createSynthesizer();
 		//synthesizer needed as container for oscillator.
@@ -35,6 +36,7 @@ class Main{
 		synth.start();
 		synth.add(lineOut);
 		synth.add(osc);
+		synth.add(osc2);
 		//turn on synth and put the osc and lineOut in it.
 		
 		InputThread userCommands = new InputThread(lineOut);
@@ -42,13 +44,16 @@ class Main{
 		
 		osc.output.connect(0, lineOut.input, 0);
 		osc.output.connect(0, lineOut.input, 1);
+		osc2.output.connect(0, lineOut.input, 0);
+		osc2.output.connect(0, lineOut.input, 1);
 		lineOut.start();
 		//connect the osc to the lineOut's output first
 		//then turn on the lineOut to allow sound to play.
 		System.out.println("Press q to quit.");
 		
 		final DataCollector dataCollector = new DataCollector();
-		
+		osc2.frequency.set(0);
+		osc2.amplitude.set(0);
 
 		while(userCommands.isRunning()) {
 			try{
@@ -61,9 +66,26 @@ class Main{
 			if(data[2] > 0) { //if the mouse is moving, play sound.
 				osc.frequency.set(userCommands.getVolumeOffset() + data[1]);
 				osc.amplitude.set(0.05 * data[2]);
+				
+				if(userCommands.overdrive()) {
+					osc2.start();
+					osc2.frequency.set(userCommands.getVolumeOffset() + data[1]-200);
+					osc2.amplitude.set(0.05 * data[2]);
+				} else {
+					osc2.stop();
+				}
+				
 			} else { //if it isn't, don't play sound.
 				osc.frequency.set(0);
 				osc.amplitude.set(0);
+				
+				if(userCommands.overdrive()) {
+					osc2.frequency.set(0);
+					osc2.amplitude.set(0);
+				} else {
+					osc2.stop();
+				}
+				
 			}
 		}
 		

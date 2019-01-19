@@ -15,6 +15,7 @@ public class InputThread extends Thread {
 	
 	private double pitchOffset;
 	private double volumeOffset;
+	private boolean overdrive = false;
 	
 	public InputThread(LineOut lineOut) {
 		this.keyboard = new Scanner(System.in);
@@ -32,7 +33,11 @@ public class InputThread extends Thread {
 			switch(this.nextCommand) {
 			case('s'):
 				this.quit = true;
-			break;
+				break;
+			case('o'):
+				this.overdrive = true;
+				System.out.println("OVERDRIVE MODE ACTIVATE");
+				break;
 			case('n'):
 				System.out.println("Never gonna give you up.");
 			break;
@@ -68,6 +73,10 @@ public class InputThread extends Thread {
 		return;
 		//System.out.println("You forgot to kill your children.");
 		
+	}
+	
+	public boolean overdrive() {
+		return this.overdrive;
 	}
 	
 	private void raisePitch() {
