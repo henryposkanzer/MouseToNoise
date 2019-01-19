@@ -60,10 +60,10 @@ class Main{
 			}
 			
 			if(speed > 0) { //if the mouse is moving, play sound.
-				osc.frequency.set(440);
+				osc.frequency.set(newY);
 				osc.amplitude.set(0.05 * speed);
 			} else { //if it isn't, don't play sound.
-				osc.frequency.set(440);
+				osc.frequency.set(0);
 				osc.amplitude.set(0);
 			}
 		}
