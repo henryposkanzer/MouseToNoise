@@ -37,6 +37,9 @@ class Main{
 		synth.add(osc);
 		//turn on synth and put the osc and lineOut in it.
 		
+		InputThread userCommands = new InputThread(lineOut);
+		userCommands.start();
+		
 		osc.output.connect(0, lineOut.input, 0);
 		osc.output.connect(0, lineOut.input, 1);
 		lineOut.start();
@@ -45,8 +48,9 @@ class Main{
 		System.out.println("Press q to quit.");
 		
 		final DataCollector dataCollector = new DataCollector();
+		
 
-		while(true) {
+		while(userCommands.isRunning()) {
 			try{
 				TimeUnit.MILLISECONDS.sleep(50);
 			}
@@ -62,6 +66,12 @@ class Main{
 				osc.amplitude.set(0);
 			}
 		}
+		
+		synth.stop();
+		System.out.println("Stopping the sound.");
+		
+		System.out.println("Closing the main thread.");
+		return;
 	}
 	
 }
