@@ -53,14 +53,14 @@ class Main{
 			oldX = newX;
 			oldY = newY;
 			try{
-				TimeUnit.MILLISECONDS.sleep(100);
+				TimeUnit.MILLISECONDS.sleep(50);
 			}
 			catch(InterruptedException e){
 				System.out.println("Whoop, there it is.");
 			}
 			
 			if(speed > 0) { //if the mouse is moving, play sound.
-				osc.frequency.set(newY);
+				osc.frequency.set(200+newY);
 				osc.amplitude.set(0.05 * speed);
 			} else { //if it isn't, don't play sound.
 				osc.frequency.set(0);
