@@ -40,6 +40,9 @@ public class InputThread extends Thread {
 					this.overdrive = true;
 				System.out.println("OVERDRIVE MODE ACTIVATE");
 				break;
+				case('O'):
+					System.out.println("Your fate is sealed.");
+				break;
 				case('n'):
 					System.out.println("Never gonna give you up.");
 				break;
