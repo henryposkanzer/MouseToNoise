@@ -66,12 +66,12 @@ class Main{
 			if(data[2] > 0) { //if the mouse is moving, play sound.
 				osc.frequency.set(userCommands.getPitchOffset() + data[1]);
 				osc.amplitude.set(userCommands.getVolumeOffset() * data[2]);
-				osc.frequency.set(userCommands.getVolumeOffset() + data[1]);
-				osc.amplitude.set(0.05 * data[2]);
+				//osc.frequency.set(userCommands.getVolumeOffset() + data[1]);
+				//osc.amplitude.set(0.05 * data[2]);
 				
 				if(userCommands.overdrive()) {
 					osc2.start();
-					osc2.frequency.set(userCommands.getVolumeOffset() + data[1]-200);
+					osc2.frequency.set(userCommands.getPitchOffset() + data[1]-200);
 					osc2.amplitude.set(0.05 * data[2]);
 				} else {
 					osc2.stop();
